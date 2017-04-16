@@ -44,7 +44,9 @@ uint8_t CmdParser::getArgBoundary(char *p, char **first, char **last) {
 
 /*
 e.g.
-    argcount = tokenizer("AT+SEND=203.185.67.124,8080,arg,10,\"Hello world\"", '=', ',');
+    #definde MAXARG 10
+    char* argv[MAXARG+1];
+    argcount = tokenizer("AT+SEND=203.185.67.124,8080,\"Hello world\",argv,MAXARG,'=',',');
 */
 uint8_t CmdParser::tokenize(char *buffer, char** argv, uint8_t maxarg, char cmdstopper, char argdelimiter) {
     uint8_t i, argc = 0;
@@ -128,13 +130,14 @@ char* CmdParser::command() {
 }
 
 char* CmdParser::argString(uint8_t n) {
-    return argv[n];
+    if (argv[n]!=NULL) return argv[n];
+    else return "";
 }
 
 double CmdParser::argFloat(uint8_t n) {
-    return atof(argv[n]);
+    return argv[n]==NULL?0:atof(argv[n]);
 }
 
 uint16_t CmdParser::argInt(uint8_t n) {
-    return atoi(argv[n]);
+    return argv[n]==NULL?0:atoi(argv[n]);
 }
